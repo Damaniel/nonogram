@@ -17,6 +17,10 @@ void init_globals(void) {
     g_globals.elapsed_seconds = 0;
     g_globals.exit_game = 0;
     g_globals.start_ticks = 0;
+    g_globals.cursor_x = 0;
+    g_globals.cursor_y = 0;
+    g_globals.old_cursor_x = 0;
+    g_globals.old_cursor_y = 0;
 }
 
 void change_state(GameState new_state) {
@@ -88,7 +92,7 @@ int main(void) {
     game_init();
     init_globals();
 
-    load_puzzle("res/puzzles/01/03.puz", &(g_globals.current_puzzle));
+    load_puzzle("res/puzzles/01/01.puz", &(g_globals.current_puzzle));
     generate_hints(&(g_globals.current_puzzle));
     change_state(STATE_GAME);
 

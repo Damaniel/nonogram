@@ -67,6 +67,7 @@ typedef struct {
     char puzzle_area;
     char puzzle;
     char hints;
+    char puzzle_cursor;
 } RenderComponents;
 
 typedef struct {
@@ -74,9 +75,13 @@ typedef struct {
     GameState current_state, previous_state;
     Puzzle current_puzzle;
     PuzzleArea pa;
+    int cursor_x, cursor_y;
+    int old_cursor_x, old_cursor_y;
     long elapsed_seconds;
     long start_ticks;
     char exit_game;
+    int total_puzzle_squares;
+    int current_puzzle_squares;
 } GameGlobals;
 
 extern GameGlobals g_globals;

@@ -1,6 +1,9 @@
 #pragma once
 #include "includes.h"
 
+// Determine if the puzzle is complete
+extern int check_for_completion(void);
+
 // Given a puzzle, generate the row and column hints
 extern void generate_hints(Puzzle *p);
 

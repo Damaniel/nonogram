@@ -1,6 +1,23 @@
 #include "includes.h"
 #include "puzz.h"
 
+int check_for_completion(void) {
+    int i, j, complete = 1;
+
+    for(j=0;j<g_globals.current_puzzle.metadata.height;j++) {
+        for (i=0;i<g_globals.current_puzzle.metadata.width;i++) {
+            if(g_globals.current_puzzle.filled_status[i][j] == SQUARE_FILLED && g_globals.current_puzzle.squares[i][j] == '.') {
+                complete = 0;
+            }
+            if(g_globals.current_puzzle.filled_status[i][j] != SQUARE_FILLED && g_globals.current_puzzle.squares[i][j] == 'X') {
+                complete = 0;
+            }
+        }
+    }
+
+    return complete;
+}
+
 void load_puzzle(char *filename, Puzzle *p) {
     FILE *fp;
     int i, j;
@@ -11,18 +28,22 @@ void load_puzzle(char *filename, Puzzle *p) {
         return;
     }
 
+    g_globals.total_puzzle_squares = 0;
+
     fscanf(fp, "%d %d %d\n", &(p->metadata.collection), &(p->metadata.level), &(p->metadata.category));
     fscanf(fp, "%d %d\n", &(p->metadata.width), &(p->metadata.height));
 
     for(j=0;j < p->metadata.height; j++) {
         for(i = 0; i < p->metadata.width; i++) {
             p->squares[i][j] = fgetc(fp);
+            if(p->squares[i][j] == 'X') {
+                g_globals.total_puzzle_squares++;
+            }
             p->filled_status[i][j] = SQUARE_EMPTY;
         }
         fscanf(fp, "\n");
     }
     fclose(fp);
-    
 }
 
 void generate_hints(Puzzle *p) {
@@ -59,11 +80,6 @@ void generate_hints(Puzzle *p) {
                 finished = 1;
             }
         } while(!finished);
-        printf("row %d: %d hints - ", line, p->num_row_hints[line]);
-        for (i=0;i<p->num_row_hints[line]; i++) {
-            printf("%d ", p->row_hints[line][i]);
-        }
-        printf("\n");
     }
 
     // generate the column hints
@@ -89,11 +105,6 @@ void generate_hints(Puzzle *p) {
                 finished = 1;
             }
         } while(!finished);
-        printf("col %d: %d hints - ", line, p->num_col_hints[line]);
-        for (i=0;i<p->num_col_hints[line]; i++) {
-            printf("%d ", p->col_hints[line][i]);
-        }
-        printf("\n");
     }
 }
 

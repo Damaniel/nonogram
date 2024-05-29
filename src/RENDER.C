@@ -48,6 +48,7 @@ void select_all_game_components() {
     g_globals.render.puzzle_area = 1;
     g_globals.render.puzzle = 1;
     g_globals.render.hints = 1;
+    g_globals.render.puzzle_cursor = 1;
 }
 
 void render_horizontal_hint(int idx) {
@@ -212,9 +213,9 @@ void render_game_state(void) {
                     char_at(g_globals.pa.pax1 + (2 * i) + 1, g_globals.pa.pay1 + j + 1, 219, make_attr(COLOR_WHITE, COLOR_BLACK));
                     char_at(g_globals.pa.pax1 + (2 * i) + 2, g_globals.pa.pay1 + j + 1, 219, make_attr(COLOR_WHITE, COLOR_BLACK));
                 }
-                else if(g_globals.current_puzzle.squares[i][j] == SQUARE_FLAGGED) {
-                    char_at(g_globals.pa.pax1 + (2 * i) + 1, g_globals.pa.pay1 + j + 1, '>', make_attr(COLOR_WHITE, COLOR_BLACK));
-                    char_at(g_globals.pa.pax1 + (2 * i) + 2, g_globals.pa.pay1 + j + 1, '<', make_attr(COLOR_WHITE, COLOR_BLACK));
+                else if(g_globals.current_puzzle.filled_status[i][j] == SQUARE_FLAGGED) {
+                    char_at(g_globals.pa.pax1 + (2 * i) + 1, g_globals.pa.pay1 + j + 1, '[', make_attr(COLOR_WHITE, COLOR_BLACK));
+                    char_at(g_globals.pa.pax1 + (2 * i) + 2, g_globals.pa.pay1 + j + 1, ']', make_attr(COLOR_WHITE, COLOR_BLACK));
                 }
                 else {
                     char_at(g_globals.pa.pax1 + (2 * i) + 1, g_globals.pa.pay1 + j + 1, ' ', make_attr(COLOR_WHITE, COLOR_BLACK));
@@ -235,6 +236,12 @@ void render_game_state(void) {
             render_horizontal_hint(i);
         }
         g_globals.render.hints = 0;
+    }
+
+    if(g_globals.render.puzzle_cursor) {
+        char_at(g_globals.pa.pax1 + (2 * g_globals.cursor_x) + 1, g_globals.pa.pay1 + g_globals.cursor_y + 1, 177, make_attr(COLOR_YELLOW, COLOR_BLACK));
+        char_at(g_globals.pa.pax1 + (2 * g_globals.cursor_x) + 2, g_globals.pa.pay1 + g_globals.cursor_y + 1, 177, make_attr(COLOR_YELLOW, COLOR_BLACK));
+        g_globals.render.puzzle_cursor = 0;
     }
 }
 
