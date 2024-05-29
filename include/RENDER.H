@@ -2,6 +2,8 @@
 
 #include "includes.h"
 
+extern void select_all_game_components(void);
+
 // Draw the static background elements
 extern void draw_background(void);
 

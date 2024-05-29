@@ -29,6 +29,7 @@ void change_state(GameState new_state) {
         case STATE_LOAD_MENU:
             break;
         case STATE_GAME:
+            select_all_game_components();
             break;
         case STATE_SAVE:
             break;
@@ -63,11 +64,21 @@ void game_init(void) {
     // Prep our pre-written timer interrupt function
     old_isr = _dos_getvect(0x1C);
     _dos_setvect(0x1C, timer_func);
+
+    // Set the screen
+    set_text_mode(MODE_80X25);
+    clear_screen();
+    hide_cursor();
 }
 
 void game_cleanup(void) {
     // restore the timer handler
     _dos_setvect(0x1C, old_isr);
+
+    // Reset the screen
+    set_text_mode(MODE_80X25);
+    clear_screen();
+    show_cursor();
 }
 
 int main(void) {
@@ -76,20 +87,10 @@ int main(void) {
 
     game_init();
     init_globals();
+
+    load_puzzle("res/puzzles/01/03.puz", &(g_globals.current_puzzle));
+    generate_hints(&(g_globals.current_puzzle));
     change_state(STATE_GAME);
-    
-    printf("%d\n",sizeof(Puzzle));
-    printf("%d\n", sizeof(PuzzleMetadata));
-
-    load_puzzle("res/puzzles/01/01.puz", &g_puzzle);
-
-    printf("Puzzle width = %d, puzzle height = %d\n", g_puzzle.metadata.width, g_puzzle.metadata.height);
-    for(j=0;j<g_puzzle.metadata.height;j++) {
-        for(i=0;i<g_puzzle.metadata.width;i++) {
-            printf("%c", g_puzzle.squares[i][j]);
-        }
-        printf("\n");
-    }
 
     while(!g_globals.exit_game) {
         key = get_input_key();
@@ -100,8 +101,6 @@ int main(void) {
         render();
         delay(2);
     }
-
-    generate_hints(&(g_puzzle));
 
     game_cleanup();
 

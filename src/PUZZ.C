@@ -17,6 +17,7 @@ void load_puzzle(char *filename, Puzzle *p) {
     for(j=0;j < p->metadata.height; j++) {
         for(i = 0; i < p->metadata.width; i++) {
             p->squares[i][j] = fgetc(fp);
+            p->filled_status[i][j] = SQUARE_EMPTY;
         }
         fscanf(fp, "\n");
     }
