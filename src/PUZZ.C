@@ -1,5 +1,5 @@
+#include "includes.h"
 #include "puzz.h"
-#include <stdio.h>
 
 void load_puzzle(char *filename, Puzzle *p) {
     FILE *fp;

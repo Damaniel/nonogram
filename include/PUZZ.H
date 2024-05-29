@@ -1,4 +1,5 @@
 #pragma once
+#include "includes.h"
 
 #define MAX_PUZZ_WIDTH      12
 #define MAX_PUZZ_HEIGHT     12
